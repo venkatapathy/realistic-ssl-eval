@@ -1,6 +1,7 @@
 from torchvision import datasets
 import argparse, os
 import numpy as np
+from submodlib.functions.facilityLocation import FacilityLocationFunction
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--seed", "-se", default=42, type=int, help="random seed")
@@ -50,6 +51,23 @@ def split_l_u(train_set, n_labels, setting):
         full_idx = list(range(len(images)))
         train_idx = list(np.random.choice(np.array(full_idx), size=n_labels, replace=False))
         lake_idx = list(set(full_idx)-set(train_idx))
+        l_images = images[train_idx]
+        l_labels = labels[train_idx]
+        u_images = images[lake_idx]
+        u_labels = labels[lake_idx]
+        l_train_set = {"images":l_images, "labels":l_labels}
+        u_train_set = {"images":u_images, "labels":u_labels}
+        
+    #using seed set obtained by submodlib
+    elif(setting == "submodlib1"):
+        print("entered into submodlib")
+        data_size  = len(images)
+        dataArray = np.array([i.reshape(3072,) for i in images])
+        obj1 = FacilityLocationFunction(n=data_size, mode="dense", data=dataArray, metric="euclidean")
+        greedyList = obj1.maximize(budget=n_labels,optimizer='NaiveGreedy', stopIfZeroGain=False, stopIfNegativeGain=False, verbose=False)
+        full_idx   = list(range(len(images)))
+        train_idx  = list(greedyList)
+        lake_idx   = list(set(full_idx)-set(train_idx))
         l_images = images[train_idx]
         l_labels = labels[train_idx]
         u_images = images[lake_idx]
