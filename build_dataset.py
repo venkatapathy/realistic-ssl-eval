@@ -65,6 +65,8 @@ def split_l_u(train_set, n_labels, setting):
         print("entered into submodlib")
         data_size  = len(images)
         dataArray = np.array([i.reshape(3072,) for i in images])
+        print("number of samples: ",data_size)
+        print("size of ndarray(num_samples x num_features):",dataArray.shape)
         obj1 = FacilityLocationFunction(n=data_size, mode="dense", data=dataArray, metric="euclidean")
         greedyList = obj1.maximize(budget=n_labels,optimizer='NaiveGreedy', stopIfZeroGain=False, stopIfNegativeGain=False, verbose=False)
         full_idx   = list(range(len(images)))
