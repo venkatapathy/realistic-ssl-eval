@@ -1,6 +1,7 @@
 from torchvision import datasets
 import argparse, os
 import numpy as np
+from numba import jit,cuda
 from submodlib.functions.facilityLocation import FacilityLocationFunction
 
 parser = argparse.ArgumentParser()
@@ -24,6 +25,7 @@ COUNTS = {
 
 _DATA_DIR = "data"
 
+@jit(target="cuda")
 def split_l_u(train_set, n_labels, setting):
     # NOTE: this function assume that train_set is shuffled.
     images = train_set["images"]
