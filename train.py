@@ -189,8 +189,10 @@ for l_data, u_data in zip(l_loader, u_loader):
     if (iteration % args.validation) == 0 or iteration == shared_cfg["iteration"]:
         with torch.no_grad():
             model.eval()
+            torch.save(model, "/media/hdd3/pavan/final-expt/realistic-ssl-eval/model_"+args.setting)
             print()
             print("### validation ###")
+            
             sum_acc = 0.
             s = time.time()
             for j, data in enumerate(val_loader):
