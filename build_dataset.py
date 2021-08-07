@@ -103,7 +103,7 @@ def split_l_u(train_set, n_labels, setting):
     
     return l_train_set, u_train_set
 
-@jit
+
 def _load_svhn():
     splits = {}
     for split in ["train", "test", "extra"]:
@@ -114,7 +114,6 @@ def _load_svhn():
         splits[split] = data
     return splits.values()
 
-@jit
 def _load_cifar10():
     splits = {}
     for train in [True, False]:
@@ -125,7 +124,7 @@ def _load_cifar10():
         splits["train" if train else "test"] = data
     return splits.values()
 
-@jit
+
 def gcn(images, multiplier=55, eps=1e-10):
     # global contrast normalization
     images = images.astype(np.float)
@@ -134,7 +133,7 @@ def gcn(images, multiplier=55, eps=1e-10):
     per_image_norm[per_image_norm < eps] = 1
     return multiplier * images / per_image_norm
 
-@jit
+
 def get_zca_normalization_param(images, scale=0.1, eps=1e-10):
     n_data, height, width, channels = images.shape
     images = images.reshape(n_data, height*width*channels)
@@ -144,7 +143,7 @@ def get_zca_normalization_param(images, scale=0.1, eps=1e-10):
     mean = images.mean(axis=0)
     return mean, zca_decomp
 
-@jit
+
 def zca_normalization(images, mean, decomp):
     n_data, height, width, channels = images.shape
     images = images.reshape(n_data, -1)
