@@ -109,7 +109,7 @@ def split_l_u(train_set, n_labels, setting):
         dataArray = np.array([i.reshape(3072,) for i in images])
         print("number of samples: ",data_size)
         print("size of ndarray(num_samples x num_features):",dataArray.shape)
-        K_dense = create_kernel(dataArray, mode='dense',metric='euclidean')
+        K_dense = create_kernel(dataArray, mode='dense',metric='euclidean', lambdaVal=1)
         obj1 = LogDeterminantFunction(n=data_size, mode="dense", sijs=K_dense)
         greedyList = obj1.maximize(budget=n_labels,optimizer='NaiveGreedy', stopIfZeroGain=False, stopIfNegativeGain=False, verbose=False)
         full_idx   = list(range(len(images)))
