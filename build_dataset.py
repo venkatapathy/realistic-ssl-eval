@@ -3,6 +3,7 @@ import argparse, os
 import numpy as np
 from numba import jit
 from submodlib.functions.facilityLocation import FacilityLocationFunction
+from submodlib.functions.disparityMin import DisparityMinFunction
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--seed", "-se", default=42, type=int, help="random seed")
@@ -61,9 +62,9 @@ def split_l_u(train_set, n_labels, setting):
         l_train_set = {"images":l_images, "labels":l_labels}
         u_train_set = {"images":u_images, "labels":u_labels}
         
-    #using seed set obtained by submodlib
-    elif(setting == "submodlib1"):
-        print("entered into submodlib")
+    #using seed set obtained by facility location
+    elif(setting == "facilitylocation"):
+        print("entered into facilityLocation")
         data_size  = len(images)
         dataArray = np.array([i.reshape(3072,) for i in images])
         print("number of samples: ",data_size)
