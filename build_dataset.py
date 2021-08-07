@@ -68,12 +68,11 @@ def split_l_u(train_set, n_labels, setting):
         data_size  = len(images)
         dataArray = np.array([i.reshape(3072,) for i in images])
         print("number of samples: ",data_size)
-        print("size of ndarray(num_samples x num_features):",dataArray.shape)
         K_dense = create_kernel(dataArray, mode='dense',metric='euclidean')
         obj1 = FacilityLocationFunction(n=data_size, mode="dense", sijs = K_dense, separate_rep=False)
         greedyList = obj1.maximize(budget=n_labels,optimizer='NaiveGreedy', stopIfZeroGain=False, stopIfNegativeGain=False, verbose=False)
         full_idx   = list(range(len(images)))
-        train_idx  = list(greedyList)
+        train_idx  = [i[0] for i in greedyList]
         lake_idx   = list(set(full_idx)-set(train_idx))
         l_images = images[train_idx]
         l_labels = labels[train_idx]
@@ -94,10 +93,8 @@ def split_l_u(train_set, n_labels, setting):
         greedyList = obj1.maximize(budget=n_labels,optimizer='NaiveGreedy', stopIfZeroGain=False, stopIfNegativeGain=False, verbose=False)
         print("returned optimized list")
         full_idx   = list(range(len(images)))
-        train_idx  = list(greedyList)
+        train_idx  = [i[0] for i in greedyList]
         lake_idx   = list(set(full_idx)-set(train_idx))
-        print(train_idx)
-        print(lake_idx)
         l_images = images[train_idx]
         l_labels = labels[train_idx]
         u_images = images[lake_idx]
@@ -116,7 +113,7 @@ def split_l_u(train_set, n_labels, setting):
         obj1 = LogDeterminantFunction(n=data_size, mode="dense", sijs=K_dense)
         greedyList = obj1.maximize(budget=n_labels,optimizer='NaiveGreedy', stopIfZeroGain=False, stopIfNegativeGain=False, verbose=False)
         full_idx   = list(range(len(images)))
-        train_idx  = list(greedyList)
+        train_idx  = [i[0] for i in greedyList]
         lake_idx   = list(set(full_idx)-set(train_idx))
         l_images = images[train_idx]
         l_labels = labels[train_idx]
