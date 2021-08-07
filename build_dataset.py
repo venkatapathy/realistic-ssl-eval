@@ -2,6 +2,7 @@ from torchvision import datasets
 import argparse, os
 import numpy as np
 from submodlib.functions.facilityLocation import FacilityLocationFunction
+from submodlib.helper import create_kernel
 from submodlib.functions.disparityMin import DisparityMinFunction
 from submodlib.functions.logDeterminant import LogDeterminantFunction
 
@@ -69,7 +70,8 @@ def split_l_u(train_set, n_labels, setting):
         dataArray = np.array([i.reshape(3072,) for i in images])
         print("number of samples: ",data_size)
         print("size of ndarray(num_samples x num_features):",dataArray.shape)
-        obj1 = FacilityLocationFunction(n=data_size, mode="dense", data=dataArray, metric="euclidean")
+        K_dense = create_kernel(dataArray, mode='dense',metric='euclidean')
+        obj1 = FacilityLocationFunction(n=data_size, mode="dense", sijs = K_dense, separate_rep=False)
         greedyList = obj1.maximize(budget=n_labels,optimizer='NaiveGreedy', stopIfZeroGain=False, stopIfNegativeGain=False, verbose=False)
         full_idx   = list(range(len(images)))
         train_idx  = list(greedyList)
@@ -86,8 +88,9 @@ def split_l_u(train_set, n_labels, setting):
         print("entered into disparitymin")
         data_size  = len(images)
         dataArray = np.array([i.reshape(3072,) for i in images])
+        K_dense = create_kernel(dataArray, mode='dense',metric='euclidean')
         print(data_size)
-        obj1 = DisparityMinFunction(n=data_size, mode="dense", data=dataArray, metric="euclidean")
+        obj1 = DisparityMinFunction(n=data_size, mode="dense", sijs=K_dense, separate_rep=False)
         print("obj instantiated")
         greedyList = obj1.maximize(budget=n_labels,optimizer='NaiveGreedy', stopIfZeroGain=False, stopIfNegativeGain=False, verbose=False)
         print("returned optimized list")
@@ -108,7 +111,8 @@ def split_l_u(train_set, n_labels, setting):
         dataArray = np.array([i.reshape(3072,) for i in images])
         print("number of samples: ",data_size)
         print("size of ndarray(num_samples x num_features):",dataArray.shape)
-        obj1 = LogDeterminantFunction(n=data_size, mode="dense", data=dataArray, metric="euclidean")
+        K_dense = create_kernel(dataArray, mode='dense',metric='euclidean')
+        obj1 = LogDeterminantFunction(n=data_size, mode="dense", sijs=K_dense, separate_rep=False)
         greedyList = obj1.maximize(budget=n_labels,optimizer='NaiveGreedy', stopIfZeroGain=False, stopIfNegativeGain=False, verbose=False)
         full_idx   = list(range(len(images)))
         train_idx  = list(greedyList)
