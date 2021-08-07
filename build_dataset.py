@@ -96,6 +96,8 @@ def split_l_u(train_set, n_labels, setting):
         full_idx   = list(range(len(images)))
         train_idx  = list(greedyList)
         lake_idx   = list(set(full_idx)-set(train_idx))
+        print(train_idx)
+        print(lake_idx)
         l_images = images[train_idx]
         l_labels = labels[train_idx]
         u_images = images[lake_idx]
