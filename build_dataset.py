@@ -109,7 +109,7 @@ def split_l_u(train_set, n_labels, setting):
         dataArray = np.array([i.reshape(3072,) for i in images])
         K_dense = create_kernel(dataArray, mode='dense',metric='euclidean')
         print(data_size)
-        obj1 = GraphCutFunction(n=data_size, mode="dense", mgijs=K_dense, lambdaVal=0.4)
+        obj1 = GraphCutFunction(n=data_size, mode="dense", mgsijs=K_dense, lambdaVal=0.4)
         print("obj instantiated")
         greedyList = obj1.maximize(budget=n_labels,optimizer='NaiveGreedy', stopIfZeroGain=False, stopIfNegativeGain=False, verbose=False)
         print("returned optimized list")
