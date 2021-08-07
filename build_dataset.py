@@ -28,7 +28,6 @@ COUNTS = {
 _DATA_DIR = "data"
 
 
-@jit
 def split_l_u(train_set, n_labels, setting):
     # NOTE: this function assume that train_set is shuffled.
     images = train_set["images"]
