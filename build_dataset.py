@@ -4,6 +4,7 @@ import numpy as np
 from numba import jit
 from submodlib.functions.facilityLocation import FacilityLocationFunction
 from submodlib.functions.disparityMin import DisparityMinFunction
+from submodlib.functions.logDeterminant import LogDeterminantFunction
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--seed", "-se", default=42, type=int, help="random seed")
@@ -91,6 +92,25 @@ def split_l_u(train_set, n_labels, setting):
         print("obj instantiated")
         greedyList = obj1.maximize(budget=n_labels,optimizer='NaiveGreedy', stopIfZeroGain=False, stopIfNegativeGain=False, verbose=False)
         print("returned optimized list")
+        full_idx   = list(range(len(images)))
+        train_idx  = list(greedyList)
+        lake_idx   = list(set(full_idx)-set(train_idx))
+        l_images = images[train_idx]
+        l_labels = labels[train_idx]
+        u_images = images[lake_idx]
+        u_labels = labels[lake_idx]
+        l_train_set = {"images":l_images, "labels":l_labels}
+        u_train_set = {"images":u_images, "labels":u_labels}
+    
+    #using seed set obtained by facility location
+    elif(setting == "logdet"):
+        print("entered into logDeterminant")
+        data_size  = len(images)
+        dataArray = np.array([i.reshape(3072,) for i in images])
+        print("number of samples: ",data_size)
+        print("size of ndarray(num_samples x num_features):",dataArray.shape)
+        obj1 = LogDeterminantFunction(n=data_size, mode="dense", data=dataArray, metric="euclidean")
+        greedyList = obj1.maximize(budget=n_labels,optimizer='NaiveGreedy', stopIfZeroGain=False, stopIfNegativeGain=False, verbose=False)
         full_idx   = list(range(len(images)))
         train_idx  = list(greedyList)
         lake_idx   = list(set(full_idx)-set(train_idx))
