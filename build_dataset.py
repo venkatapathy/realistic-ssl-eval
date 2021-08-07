@@ -1,7 +1,6 @@
 from torchvision import datasets
 import argparse, os
 import numpy as np
-from numba import jit
 from submodlib.functions.facilityLocation import FacilityLocationFunction
 from submodlib.functions.disparityMin import DisparityMinFunction
 from submodlib.functions.logDeterminant import LogDeterminantFunction
@@ -102,7 +101,7 @@ def split_l_u(train_set, n_labels, setting):
         l_train_set = {"images":l_images, "labels":l_labels}
         u_train_set = {"images":u_images, "labels":u_labels}
     
-    #using seed set obtained by facility location
+    #using seed set obtained by log determinant
     elif(setting == "logdet"):
         print("entered into logDeterminant")
         data_size  = len(images)
