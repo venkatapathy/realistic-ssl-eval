@@ -5,6 +5,7 @@ from submodlib.functions.facilityLocation import FacilityLocationFunction
 from submodlib.helper import create_kernel
 from submodlib.functions.disparityMin import DisparityMinFunction
 from submodlib.functions.logDeterminant import LogDeterminantFunction
+from submodlib.functions.graphCut import GraphCutFunction
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--seed", "-se", default=42, type=int, help="random seed")
@@ -89,6 +90,26 @@ def split_l_u(train_set, n_labels, setting):
         K_dense = create_kernel(dataArray, mode='dense',metric='euclidean')
         print(data_size)
         obj1 = DisparityMinFunction(n=data_size, mode="dense", sijs=K_dense)
+        print("obj instantiated")
+        greedyList = obj1.maximize(budget=n_labels,optimizer='NaiveGreedy', stopIfZeroGain=False, stopIfNegativeGain=False, verbose=False)
+        print("returned optimized list")
+        full_idx   = list(range(len(images)))
+        train_idx  = [i[0] for i in greedyList]
+        lake_idx   = list(set(full_idx)-set(train_idx))
+        l_images = images[train_idx]
+        l_labels = labels[train_idx]
+        u_images = images[lake_idx]
+        u_labels = labels[lake_idx]
+        l_train_set = {"images":l_images, "labels":l_labels}
+        u_train_set = {"images":u_images, "labels":u_labels}
+    #using subset obtained from disparity min
+    elif(setting == "graphcut"):
+        print("entered into graphcut")
+        data_size  = len(images)
+        dataArray = np.array([i.reshape(3072,) for i in images])
+        K_dense = create_kernel(dataArray, mode='dense',metric='euclidean')
+        print(data_size)
+        obj1 = GraphCutFunction(n=data_size, mode="dense", mgijs=K_dense)
         print("obj instantiated")
         greedyList = obj1.maximize(budget=n_labels,optimizer='NaiveGreedy', stopIfZeroGain=False, stopIfNegativeGain=False, verbose=False)
         print("returned optimized list")
