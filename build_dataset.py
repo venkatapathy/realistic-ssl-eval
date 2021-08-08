@@ -52,7 +52,7 @@ def split_l_u(train_set, n_labels, setting):
             u_train_set = {"images": np.concatenate(u_images, 0), "labels": np.concatenate(u_labels, 0)}
         
     elif(setting == "random"):
-        np.random.seed(42)
+        np.random.seed(0)
         full_idx = list(range(len(images)))
         train_idx = list(np.random.choice(np.array(full_idx), size=n_labels, replace=False))
         lake_idx = list(set(full_idx)-set(train_idx))
