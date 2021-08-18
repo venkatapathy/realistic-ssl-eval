@@ -6,6 +6,7 @@ import torch.optim as optim
 import torch.nn.functional as F
 from torch.utils.data import DataLoader
 
+import matplotlib.pyplot as plt
 import argparse, math, time, json, os
 from lib.datasets.custom_dataset import load_dataset_custom
 from lib import wrn, transform
@@ -137,6 +138,9 @@ print()
 iteration = 0
 maximum_val_acc = 0
 s = time.time()
+validation_accuracies = []
+testing_accuracies = []
+iterations_list = []
 for l_data, u_data in zip(l_loader, u_loader):
     iteration += 1
     l_input, target = l_data
@@ -186,6 +190,7 @@ for l_data, u_data in zip(l_loader, u_loader):
         s = time.time()
 
     # validation
+    
     if (iteration % args.validation) == 0 or iteration == shared_cfg["iteration"]:
         with torch.no_grad():
             model.eval()
@@ -212,6 +217,13 @@ for l_data, u_data in zip(l_loader, u_loader):
             acc = sum_acc/float(len(val_dataset))
             print()
             print("varidation accuracy : {}".format(acc))
+            validation_accuracies.append(acc)
+            iterations_list.append(iteration)
+            plt.plot(iterations_list, validation_accuracies)
+            plt.xlabel('iteration')
+            plt.ylabel('validation accuracy')
+            plt.save('validation.png')
+            
             # test
             if maximum_val_acc < acc:
                 print("### test ###")
@@ -233,6 +245,12 @@ for l_data, u_data in zip(l_loader, u_loader):
                 print()
                 test_acc = sum_acc / float(len(test_dataset))
                 print("test accuracy : {}".format(test_acc))
+                testing_accuracies.append(test_acc)
+                
+                plt.plot(iterations_list, testing_accuracies)
+                plt.xlabel('iteration')
+                plt.ylabel('testing accuracy')
+                plt.save('testing.png')
                 # torch.save(model.state_dict(), os.path.join(args.output, "best_model.pth"))
         model.train()
         s = time.time()
