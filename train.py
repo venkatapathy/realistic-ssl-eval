@@ -252,7 +252,7 @@ for l_data, u_data in zip(l_loader, u_loader):
                 plt.plot(torch.tensor(testing_iters_list).cpu(), torch.tensor(testing_accuracies).cpu())
                 plt.xlabel('iteration')
                 plt.ylabel('testing accuracy')
-                plt.savefig('testing '+args.setting+'.png')
+                plt.savefig('testing'+args.setting+'.png')
                 plt.clf()
                 # torch.save(model.state_dict(), os.path.join(args.output, "best_model.pth"))
         model.train()
