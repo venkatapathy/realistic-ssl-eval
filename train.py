@@ -194,7 +194,7 @@ for l_data, u_data in zip(l_loader, u_loader):
     if (iteration % args.validation) == 0 or iteration == shared_cfg["iteration"]:
         with torch.no_grad():
             model.eval()
-            torch.save(model, "/media/hdd3/pavan/ssl/realistic-ssl-eval/model_"+args.setting)
+            #torch.save(model, "/media/hdd3/pavan/ssl/realistic-ssl-eval/model_"+args.setting)
             print()
             print("### validation ###")
             
@@ -222,7 +222,7 @@ for l_data, u_data in zip(l_loader, u_loader):
             plt.plot(iterations_list, validation_accuracies)
             plt.xlabel('iteration')
             plt.ylabel('validation accuracy')
-            plt.save('validation.png')
+            plt.savefig('validation'+args.setting+'.png')
             
             # test
             if maximum_val_acc < acc:
@@ -250,7 +250,7 @@ for l_data, u_data in zip(l_loader, u_loader):
                 plt.plot(iterations_list, testing_accuracies)
                 plt.xlabel('iteration')
                 plt.ylabel('testing accuracy')
-                plt.save('testing.png')
+                plt.savefig('testing'+args.setting+'.png')
                 # torch.save(model.state_dict(), os.path.join(args.output, "best_model.pth"))
         model.train()
         s = time.time()
