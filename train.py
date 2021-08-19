@@ -249,7 +249,7 @@ for l_data, u_data in zip(l_loader, u_loader):
                 print("test accuracy : {}".format(test_acc))
                 testing_accuracies.append(test_acc)
                 testing_iters_list.append(iteration)
-                plt.plot(torch.tensor(test_iters_list).cpu(), torch.tensor(testing_accuracies).cpu())
+                plt.plot(torch.tensor(testing_iters_list).cpu(), torch.tensor(testing_accuracies).cpu())
                 plt.xlabel('iteration')
                 plt.ylabel('testing accuracy')
                 plt.savefig('testing '+args.setting+'.png')
