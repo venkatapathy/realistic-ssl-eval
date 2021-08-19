@@ -141,6 +141,7 @@ s = time.time()
 validation_accuracies = []
 testing_accuracies = []
 iterations_list = []
+testing_iters_list = []
 for l_data, u_data in zip(l_loader, u_loader):
     iteration += 1
     l_input, target = l_data
@@ -223,6 +224,7 @@ for l_data, u_data in zip(l_loader, u_loader):
             plt.xlabel('iteration')
             plt.ylabel('validation accuracy')
             plt.savefig('validation'+args.setting+'.png')
+            plt.clf()
             
             # test
             if maximum_val_acc < acc:
@@ -246,11 +248,12 @@ for l_data, u_data in zip(l_loader, u_loader):
                 test_acc = sum_acc / float(len(test_dataset))
                 print("test accuracy : {}".format(test_acc))
                 testing_accuracies.append(test_acc)
-                
-                plt.plot(torch.tensor(iterations_list).cpu(), torch.tensor(testing_accuracies).cpu())
+                testing_iters_list.append(iteration)
+                plt.plot(torch.tensor(test_iters_list).cpu(), torch.tensor(testing_accuracies).cpu())
                 plt.xlabel('iteration')
                 plt.ylabel('testing accuracy')
-                plt.savefig('testing'+args.setting+'.png')
+                plt.savefig('testing '+args.setting+'.png')
+                plt.clf()
                 # torch.save(model.state_dict(), os.path.join(args.output, "best_model.pth"))
         model.train()
         s = time.time()
