@@ -219,7 +219,7 @@ for l_data, u_data in zip(l_loader, u_loader):
             print("varidation accuracy : {}".format(acc))
             validation_accuracies.append(acc)
             iterations_list.append(iteration)
-            plt.plot(iterations_list, validation_accuracies)
+            plt.plot(torch.tensor(iterations_list).cpu(), torch.tensor(validation_accuracies).cpu())
             plt.xlabel('iteration')
             plt.ylabel('validation accuracy')
             plt.savefig('validation'+args.setting+'.png')
@@ -247,7 +247,7 @@ for l_data, u_data in zip(l_loader, u_loader):
                 print("test accuracy : {}".format(test_acc))
                 testing_accuracies.append(test_acc)
                 
-                plt.plot(iterations_list, testing_accuracies)
+                plt.plot(torch.tensor(iterations_list).cpu(), torch.tensor(testing_accuracies).cpu())
                 plt.xlabel('iteration')
                 plt.ylabel('testing accuracy')
                 plt.savefig('testing'+args.setting+'.png')
